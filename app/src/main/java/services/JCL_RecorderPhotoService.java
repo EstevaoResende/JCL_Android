@@ -96,6 +96,12 @@ public class JCL_RecorderPhotoService extends Service implements Runnable,
                             s.setDataType("jpeg");
                             //s.showData();
                             //int key = values.keySet().str
+                            if (!JCL_FacadeImpl.getInstance().containsGlobalVar(JCL_ANDROID_Facade.getInstance().getDevice() + JCL_Sensor.TypeSensor.TYPE_PHOTO.id +"_NUMELEMENTS")){
+                                max = 0;
+                                min = 0;
+                                values = new JCLHashMap<Integer, interfaces.kernel.JCL_Sensor>(JCL_ANDROID_Facade.getInstance().getDevice() + JCL_Sensor.TypeSensor.TYPE_PHOTO.id + "_value");
+                                JCL_FacadeImpl.getInstance().instantiateGlobalVar(JCL_ANDROID_Facade.getInstance().getDevice() + JCL_Sensor.TypeSensor.TYPE_PHOTO.id +"_NUMELEMENTS", "0");
+                            }
                             if ((max-min)>jcl.getSize().get(JCL_Sensor.TypeSensor.TYPE_PHOTO.id)){
                                 values.remove(min++);
                             }

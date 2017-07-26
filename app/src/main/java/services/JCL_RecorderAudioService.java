@@ -70,6 +70,12 @@ public class JCL_RecorderAudioService extends Service implements Runnable, JCL_A
                     s.setDataType("3gp");
                     //s.showData();
                     //int key = values.keySet().str
+                    if (!JCL_FacadeImpl.getInstance().containsGlobalVar(JCL_ANDROID_Facade.getInstance().getDevice() + JCL_Sensor.TypeSensor.TYPE_AUDIO.id +"_NUMELEMENTS")){
+                        max = 0;
+                        min = 0;
+                        values = new JCLHashMap<Integer, interfaces.kernel.JCL_Sensor>(JCL_ANDROID_Facade.getInstance().getDevice() + JCL_Sensor.TypeSensor.TYPE_AUDIO.id + "_value");
+                        JCL_FacadeImpl.getInstance().instantiateGlobalVar(JCL_ANDROID_Facade.getInstance().getDevice() + JCL_Sensor.TypeSensor.TYPE_AUDIO.id +"_NUMELEMENTS", "0");
+                    }
                     if ((max-min)>jcl.getSize().get(JCL_Sensor.TypeSensor.TYPE_AUDIO.id)){
                         values.remove(min++);
                     }

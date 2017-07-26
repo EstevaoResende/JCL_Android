@@ -1,4 +1,7 @@
 package implementations.dm_kernel.user;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+
 import org.jf.dexlib2.DexFileFactory;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.iface.ClassDef;
@@ -322,6 +325,7 @@ import commom.JCL_taskImpl;
         byte[] dex = null;
         // TODO Auto-generated method stub
         try {
+
             String apkPath = JCL_ApplicationContext.getContext().getApplicationInfo().sourceDir;
             //String[] g = {"mail.dex", "sorting.dex", "disjkstra.dex"};
             //for (String k:g) {

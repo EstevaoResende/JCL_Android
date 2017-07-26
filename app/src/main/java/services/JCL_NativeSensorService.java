@@ -185,6 +185,12 @@ public class JCL_NativeSensorService extends Service implements Runnable, Sensor
                                     s.setTime(System.currentTimeMillis());
                                     s.setDataType(se.getDataType());
                                     //int key = values.keySet().str
+                                    if (!JCL_FacadeImpl.getInstance().containsGlobalVar(JCL_ANDROID_Facade.getInstance().getDevice() + i +"_NUMELEMENTS")){
+                                        mapMaxValues.put(i, 0);
+                                        mapMinValues.put(i, 0);
+                                        jclMapSensors.put(i, new JCLHashMap<Integer, interfaces.kernel.JCL_Sensor>(JCL_ANDROID_Facade.getInstance().getDevice() + i + "_value"));
+                                        JCL_FacadeImpl.getInstance().instantiateGlobalVar(JCL_ANDROID_Facade.getInstance().getDevice() + i +"_NUMELEMENTS", "0");
+                                    }
                                     if ((mapMaxValues.get(i) - mapMinValues.get(i)) > jcl.getSize().get(i)) {
                                         int min = mapMinValues.get(i);
                                         jclMapSensors.get(i).remove(min);
