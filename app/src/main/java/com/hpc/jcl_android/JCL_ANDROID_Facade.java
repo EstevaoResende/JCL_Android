@@ -1127,7 +1127,7 @@ public class JCL_ANDROID_Facade {
         public MessageSensorImpl getSensorNow();
     }
 
-    private void writeHPCProperties(Properties configProperties) {
+    public void writeHPCProperties(Properties configProperties) {
         try {
 
             String rootPath = Environment.getExternalStorageDirectory().toString();

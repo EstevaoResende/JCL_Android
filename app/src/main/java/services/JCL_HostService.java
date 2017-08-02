@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -18,6 +19,9 @@ import com.hpc.jcl_android.R;
 //import com.hpc.jcl_android.SuperContext;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -36,6 +40,7 @@ import implementations.dm_kernel.ConnectorImpl;
 import implementations.dm_kernel.MessageMetadataImpl;
 import implementations.dm_kernel.host.MainHost;
 import implementations.util.IoT.CryptographyUtils;
+import implementations.util.ServerDiscovery;
 import interfaces.kernel.JCL_message_get_host;
 import sensor.JCL_Sensor;
 
@@ -321,6 +326,7 @@ public class JCL_HostService extends Service implements Runnable, JCL_ANDROID_Fa
 
 
     public void register() {
+
         JCL_ANDROID_Facade jcl = JCL_ANDROID_Facade.getInstance();
 
         MessageMetadataImpl m = new MessageMetadataImpl();
@@ -334,7 +340,39 @@ public class JCL_HostService extends Service implements Runnable, JCL_ANDROID_Fa
 
 
         ConnectorImpl co = new ConnectorImpl();
-        co.connect(ip, port, null);
+
+
+
+        boolean connected = co.connect(ip, port, null);
+        if (!connected){
+            String serverData[] = ServerDiscovery.discoverServer();
+            if (serverData != null){
+                ip = serverData[0];
+                port = Integer.parseInt(serverData[1]);
+                co.connect(ip, port, null);
+                Properties properties = jcl.getConfigurationProperties(this);
+                properties.setProperty("SERVERPORT", port+"");
+                properties.setProperty("SERVERIP", ip);
+
+                String rootPath = Environment.getExternalStorageDirectory().toString() + "/jclAndroid/";
+                FileOutputStream fileOut = null;
+                try {
+                    fileOut = new FileOutputStream(rootPath + "/jcl.configuration.properties");
+                    properties.store(fileOut, "");
+                    fileOut.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                jcl.writeHPCProperties(properties);
+            }
+
+        }
+
+
+
+
         JCL_message_get_host msgr = (JCL_message_get_host) co.sendReceiveG(m, null);
 
         if (activateEncryption)
