@@ -740,17 +740,19 @@ public class JCL_orbImpl<T extends JCL_result> implements JCL_orb<T> {
     }
 
     @Override
-    public JCL_result getValue(Object key) {
+    public Object getValue(Object key) {
         try {
             Object obj = globalVars.get(key);
             if (obj == null) {
-                JCL_result jclr = new JCL_resultImpl();
-                jclr.setCorrectResult("No value found!");
-                return jclr;
+//				JCL_result jclr = new JCL_resultImpl();
+//				jclr.setCorrectResult("No value found!");
+//				return jclr;
+                return new String("No value found!");
             } else {
-                JCL_result jclr = new JCL_resultImpl();
-                jclr.setCorrectResult(obj);
-                return jclr;
+//				JCL_result jclr = new JCL_resultImpl();
+//				jclr.setCorrectResult(obj);
+//				return jclr;
+                return obj;
             }
         } catch (Exception e) {
             System.err.println("problem in JCL orb getValue(String varName)");
