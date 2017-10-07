@@ -6,6 +6,8 @@ public final class ByteArrayWrapper
 {
     private final byte[] data;
 
+    public ByteArrayWrapper(){data = null;}
+
     public ByteArrayWrapper(byte[] data)
     {
         if (data == null)

@@ -64,6 +64,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -175,7 +176,7 @@ public class SocketConsumer<S extends JCL_handler> extends GenericConsumer<S> {
             // (JCL_message)super.ReadObjectFromSock(str.getKey(),
             // str.getInput());
             JCL_message msg = str.getMsg();
-            //Log.e("Mensagem", msg.getType()+"");
+            Log.e("Mensagem", msg.getType()+"");
 
             switch (msg.getType()) {
 
@@ -542,11 +543,10 @@ public class SocketConsumer<S extends JCL_handler> extends GenericConsumer<S> {
                 case 14: {
 
                     // getValue(id) type:14
-                    JCL_message_generic jclC = (JCL_message_generic) msg;
-
+                    JCL_message_generic jclC = (JCL_message_generic)msg;
                     Object jclR = orb.getValue(new ByteArrayWrapper((byte[])jclC.getRegisterData()));
 
-                    JCL_message_result RESULT = new MessageResultImpl();
+                    JCL_message_generic RESULT = new MessageGenericImpl();
                     RESULT.setType(14);
 
                     // Write data
@@ -760,12 +760,18 @@ public class SocketConsumer<S extends JCL_handler> extends GenericConsumer<S> {
                     // hashAdd() type 29
                     JCL_message_generic aux = (JCL_message_generic) msg;
                     Object[] dados = (Object[]) aux.getRegisterData();
-                    JclHashMap.get(dados[0]).add(dados[1]);
+
+                    if(dados[1] instanceof Collection || dados[1] instanceof Map){
+                        JclHashMap.get(dados[0]).addAll((Collection<? extends Object>) dados[1]);
+                    }else{
+                        JclHashMap.get(dados[0]).add(dados[1]);
+                    }
+
                     JCL_message_generic resp = new MessageGenericImpl();
                     resp.setRegisterData(true);
 
                     // Write data
-                    super.WriteObjectOnSock(resp, str, false);
+                    super.WriteObjectOnSock(resp, str,false);
                     // End Write data
                     break;
                 }
