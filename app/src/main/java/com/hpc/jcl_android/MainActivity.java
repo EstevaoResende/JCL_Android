@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_MULTIPLE_REQUEST = 1994;
     private Fragment1 fragment1 = new Fragment1();
     private List<String> askedPermissions = new ArrayList<>();
+
+    static {
+        System.setProperty("protostuff.runtime.always_use_sun_reflection_factory", "true");
+    }
 //    private static final int permissionCamera = 1;
 //    private static final int permissionLocation = 2;
 //    private static final int permissionMicrophone = 3;

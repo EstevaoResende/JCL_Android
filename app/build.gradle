@@ -33,20 +33,21 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:9.4.0'
     compile 'com.google.guava:guava:18.0'
     compile 'com.beust:jcommander:1.48'
-    compile 'io.protostuff:protostuff-core:1.5.2'
-    compile 'io.protostuff:protostuff-api:1.5.2'
-    compile 'io.protostuff:protostuff-collectionschema:1.5.2'
 
-    compile 'io.protostuff:protostuff-runtime:1.5.2'
+    compile 'io.protostuff:protostuff-core:1.6.0'
+    compile 'io.protostuff:protostuff-api:1.6.0'
+    compile 'io.protostuff:protostuff-collectionschema:1.6.0'
+
+    compile 'io.protostuff:protostuff-runtime:1.6.0'
     compile 'com.android.support:design:24.2.1'
     compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.1.1'
 
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.+"
 
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    })
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 }
 
 

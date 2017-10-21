@@ -18,7 +18,6 @@ import implementations.dm_kernel.MessageMetadataImpl;
 import implementations.dm_kernel.MessageRegisterImpl;
 import implementations.dm_kernel.SimpleServer;
 import implementations.dm_kernel.server.RoundRobin;
-import implementations.util.ByteArrayWrapper;
 import implementations.util.JCL_ApplicationContext;
 import implementations.util.ObjectWrap;
 import implementations.util.ServerDiscovery;
@@ -38,7 +37,6 @@ import interfaces.kernel.JCL_task;
 import interfaces.kernel.datatype.Device;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtobufIOUtil;
-import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 
@@ -49,8 +47,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import implementations.util.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -70,8 +68,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import javassist.ClassPool;
-import javassist.CtClass;
+
 import commom.Constants;
 import commom.JCL_resultImpl;
 import commom.JCL_taskImpl;
@@ -1361,7 +1358,7 @@ public class JCL_FacadeImpl extends implementations.sm_kernel.JCL_FacadeImpl.Hol
             for(Object key:set){
 
                 ObjectWrap obj = scow.newMessage();
-                ProtobufIOUtil.mergeFrom((((ByteArrayWrapper)key).getdata()), obj, scow);
+                ProtobufIOUtil.mergeFrom((((ByteBuffer)key).getArray()), obj, scow);
                 Object k = obj.getobj();
 
                 k = (k.toString()+"¬Map¬"+gvname);
@@ -1588,7 +1585,7 @@ public class JCL_FacadeImpl extends implementations.sm_kernel.JCL_FacadeImpl.Hol
                     String portS = deviceI.getValue().get("PORT_SUPER_PEER");
 
                     //instantiateGlobalVar using lambari
-                    Object[] argsLam = {key,instance,host,port,mac,portS,null};
+                    Object[] argsLam = {key,instance,host,port,mac,portS,new Integer(0)};
                     Future<JCL_result> t = jcl.execute("JCL_FacadeImplLamb", "instantiateGlobalVar", argsLam);
                     return (Boolean) (t.get()).getCorrectResult();
                 }
@@ -2074,12 +2071,12 @@ public class JCL_FacadeImpl extends implementations.sm_kernel.JCL_FacadeImpl.Hol
     public static JCL_facade getInstancePacu() {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("../jcl_conf/config.properties"));
+            properties.load(new FileInputStream(Constants.Environment.JCLConfig()));
         }catch (FileNotFoundException e){
-            System.err.println("File not found (../jcl_conf/config.properties) !!!!!");
-            System.out.println("Create properties file ../jcl_conf/config.properties.");
+            System.err.println("File not found ("+Constants.Environment.JCLConfig()+") !!!!!");
+            System.out.println("Create properties file "+Constants.Environment.JCLConfig()+".");
             try {
-                File file = new File("../jcl_conf/config.properties");
+                File file = new File(Constants.Environment.JCLConfig());
                 file.getParentFile().mkdirs(); // Will create parent directories if not exists
                 file.createNewFile();
 
@@ -2156,12 +2153,12 @@ public class JCL_FacadeImpl extends implementations.sm_kernel.JCL_FacadeImpl.Hol
 
             Properties properties = new Properties();
             try {
-                properties.load(new FileInputStream("../jcl_conf/config.properties"));
+                properties.load(new FileInputStream(Constants.Environment.JCLConfig()));
             }catch (FileNotFoundException e){
-                System.err.println("File not found (../jcl_conf/config.properties) !!!!!");
-                System.out.println("Create properties file ../jcl_conf/config.properties.");
+                System.err.println("File not found ("+Constants.Environment.JCLConfig()+") !!!!!");
+                System.out.println("Create properties file "+Constants.Environment.JCLConfig()+".");
                 try {
-                    File file = new File("../jcl_conf/config.properties");
+                    File file = new File(Constants.Environment.JCLConfig());
                     file.getParentFile().mkdirs(); // Will create parent directories if not exists
                     file.createNewFile();
 
